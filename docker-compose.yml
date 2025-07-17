@@ -1,0 +1,75 @@
+version: '3.8'
+services:
+  # connector:
+  #   image: connector:0.2.0
+  #   container_name: connector
+  #   depends_on:
+  #     - postgres
+  #     - minio
+  #     - keycloak
+  #   environment:
+  #     - APP_NAME=connector
+  #     - APP_PORT=3010
+  #     - CLOUD_CATALOG_URL=http://localhost:3000/
+  #     - USER_ID=0cfe7ac0-f230-4cb5-91da-dc724d2c93ae
+  #     - DB_NAME=connector
+  #     - DB_HOST=postgres
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=root
+  #     - MINIO_ENDPOINT=minio
+  #     - MINIO_PORT=9000
+  #     - MINIO_ACCESS_KEY=admin
+  #     - MINIO_SECRET_KEY=admin123
+  #     - NODE_ENV=development  # Change to development to install all dependencies
+  #     - KC_URL=http://keycloak:9090/auth
+  #     - KC_REALM=connector
+  #     - KC_CLIENT_ID=local-connector
+  #     - KC_CLIENT_SECRET=JF9nTM1alqbOc6RDMSelKhKxAukojDRT
+  #   ports:
+  #     - "3010:3010"
+
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: connector
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  minio:
+    image: quay.io/minio/minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    restart: always
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: root
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin123
+    ports:
+      - "9090:8080"
+    command: start-dev
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  minio_data:

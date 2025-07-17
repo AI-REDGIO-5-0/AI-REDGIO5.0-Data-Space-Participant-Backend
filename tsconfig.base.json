@@ -1,0 +1,28 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2020", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@ai-redgio/consumer": ["libs/consumer/src/index.ts"],
+            "@ai-redgio/datastore": ["libs/datastore/src/index.ts"],
+            "@ai-redgio/metadata": ["libs/metadata/src/index.ts"],
+            "@ai-redgio/minio": ["libs/minio/src/index.ts"],
+            "@ai-redgio/provider": ["libs/provider/src/index.ts"],
+            "@ai-redgio/shared": ["libs/shared/src/index.ts"],
+            "@ai-redgio/users": ["libs/users/src/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}

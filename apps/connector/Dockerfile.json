@@ -1,0 +1,51 @@
+# Stage 1: Build the application
+FROM node:20-alpine AS builder
+
+# Install necessary dependencies
+RUN apk add --no-cache libc6-compat
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Enable pnpm and install dependencies
+RUN corepack enable && corepack prepare pnpm@latest-8 --activate
+
+# Copy package.json and pnpm-lock.yaml from the build context
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the application source code
+COPY . .
+
+# Build the application using npx
+RUN npx nx build connector
+
+# Stage 2: Create the production image
+FROM node:20-alpine AS runner
+
+# Install dumb-init for better signal handling
+RUN apk add --no-cache dumb-init
+
+# Set environment variables
+ENV NODE_ENV production
+ENV PORT 3010
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy necessary files from the builder stage
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/package.json ./package.json
+COPY --from=builder /usr/src/app/dist ./dist
+
+# Set permissions and switch to a non-root user
+RUN chown -R node:node .
+USER node
+
+# Expose the application port
+EXPOSE 3000
+
+# Start the application
+CMD ["dumb-init", "node", "dist/apps/connector/main.js"]

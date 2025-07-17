@@ -1,0 +1,76 @@
+{
+  "name": "connector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/connector/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "connector:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "connector:build:development"
+        },
+        "production": {
+          "buildTarget": "connector:build:production"
+        }
+      }
+    },
+    "build-migrations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/connector",
+        "command": "tsc --project ./tsconfig.orm.json"
+      }
+    },
+    "migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/connector",
+        "command": "npx mikro-orm {args.action}"
+      },
+      "defaultConfiguration": "pending",
+      "configurations": {
+        "check": {
+          "args": "--action=migration:check"
+        },
+        "pending": {
+          "args": "--action=migration:pending"
+        },
+        "list": {
+          "args": "--action=migration:list"
+        },
+        "up": {
+          "args": "--action=migration:up"
+        },
+        "down": {
+          "args": "--action=migration:down"
+        },
+        "create": {
+          "args": "--action=migration:create"
+        }
+      }
+    },
+    "container": {
+            "executor": "@nx-tools/nx-container:build",
+            "dependsOn": ["build", "build-migrations"],
+            "options": {
+                "engine": "docker",
+                "platforms": ["linux/amd64"],
+                "metadata": {
+                    "images": ["connector"],
+                    "load": true,
+                    "labels": [
+                      "org.opencontainers.image.authors=Suite5 Information Technology Solutions",
+                      "org.opencontainers.image.version=0.1.0"
+                  ],
+                    "tags": ["0.2.0"]
+                }
+            }
+        }
+  },
+  "tags": []
+}
