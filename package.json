@@ -1,9 +1,28 @@
 {
-  "name": "@ai-redgio/source",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {},
+  "name": "data-connector",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
   "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "mikro:migrate:create": "mikro-orm migration:create",
+    "mikro:migrate:up": "mikro-orm migration:up",
+    "mikro:migrate:down": "mikro-orm migration:down",
+    "migrate": "ts-node migrate.ts"
+  },
   "dependencies": {
     "@colors/colors": "^1.6.0",
     "@mikro-orm/cli": "^6.4.6",
@@ -18,8 +37,6 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/schedule": "^5.0.1",
     "@nestjs/swagger": "^11.0.3",
-    "@nx-tools/container-metadata": "^6.1.1",
-    "@nx-tools/nx-container": "^6.2.0",
     "axios": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -36,23 +53,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
+    "@nestjs/cli": "^11.0.10",
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
-    "@nx/eslint": "20.4.2",
-    "@nx/eslint-plugin": "20.4.2",
-    "@nx/jest": "20.4.2",
-    "@nx/js": "20.4.2",
-    "@nx/nest": "20.4.2",
-    "@nx/node": "20.4.2",
-    "@nx/web": "20.4.2",
-    "@nx/webpack": "20.4.2",
-    "@nx/workspace": "20.4.2",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.12",
+    "@types/morgan": "^1.9.10",
     "@types/multer": "^1.4.12",
     "@types/node": "~18.16.9",
     "eslint": "^9.8.0",
@@ -61,20 +71,29 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "jest": "^29.7.0",
     "jest-environment-node": "^29.7.0",
-    "nx": "21.1.1",
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
-    "typescript": "~5.7.2",
+    "typescript": "~5.7.3",
     "typescript-eslint": "^8.19.0",
     "webpack-cli": "^5.1.4"
   },
-  "mikro-orm": {
-    "useTsNode": true,
-    "configPaths": [
-      "./src/orm.config.ts"
-    ]
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   },
-  "nx": {},
-  "packageManager": "pnpm@8.15.8+sha256.691fe176eea9a8a80df20e4976f3dfb44a04841ceb885638fe2a26174f81e65e"
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
 }

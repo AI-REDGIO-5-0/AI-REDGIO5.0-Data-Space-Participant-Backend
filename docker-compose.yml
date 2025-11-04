@@ -1,33 +1,25 @@
-version: '3.8'
+version: "3.8"
 services:
-  # connector:
-  #   image: connector:0.2.0
-  #   container_name: connector
-  #   depends_on:
-  #     - postgres
-  #     - minio
-  #     - keycloak
-  #   environment:
-  #     - APP_NAME=connector
-  #     - APP_PORT=3010
-  #     - CLOUD_CATALOG_URL=http://localhost:3000/
-  #     - USER_ID=0cfe7ac0-f230-4cb5-91da-dc724d2c93ae
-  #     - DB_NAME=connector
-  #     - DB_HOST=postgres
-  #     - DB_PORT=5432
-  #     - DB_USERNAME=postgres
-  #     - DB_PASSWORD=root
-  #     - MINIO_ENDPOINT=minio
-  #     - MINIO_PORT=9000
-  #     - MINIO_ACCESS_KEY=admin
-  #     - MINIO_SECRET_KEY=admin123
-  #     - NODE_ENV=development  # Change to development to install all dependencies
-  #     - KC_URL=http://keycloak:9090/auth
-  #     - KC_REALM=connector
-  #     - KC_CLIENT_ID=local-connector
-  #     - KC_CLIENT_SECRET=JF9nTM1alqbOc6RDMSelKhKxAukojDRT
-  #   ports:
-  #     - "3010:3010"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-redgio-5-participant-connector
+    ports:
+      - "3000:3000"
+    environment:
+      APP_NAME: data-connector
+      APP_PORT: 3000
+      APP_LOG_LEVEL: debug
+      DB_NAME: data-connector
+      DB_HOST: postgres
+      DB_PORT: 6432
+      DB_USERNAME: postgres
+      DB_PASSWORD: root
+      KC_URL: http://localhost:9090
+      KC_REALM: data-connector
+      KC_CLIENT_ID: local-connector
+      KC_CLIENT_SECRET: JF9nTM1alqbOc6RDMSelKhKxAukojDRT
 
   postgres:
     image: postgres:15
