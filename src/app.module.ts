@@ -45,7 +45,7 @@ import { MorganMiddleware } from './logger/morgan.middleware';
       port: +(process.env.MINIO_PORT)!,
       accessKey: process.env.MINIO_ACCESS_KEY!,
       secretKey: process.env.MINIO_SECRET_KEY!,
-      useSSL: true,
+      useSSL: process.env.MINIO_SSL === 'true',
     }),
     ProviderModule.registerAsync({
       imports: [ConfigModule.forFeature(AppConfig)],
